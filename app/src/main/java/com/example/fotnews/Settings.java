@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class Settings extends AppCompatActivity {
     private LinearLayout btnSignoutConfirm;
     private LinearLayout btnEditCancel;
     private LinearLayout btnEditSave;
+    private ImageView backImageView;
 
     // Firebase
     private FirebaseAuth auth;
@@ -41,6 +43,9 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
+        backImageView = findViewById(R.id.back);
+        backImageView.setOnClickListener(v -> finish());
+
 
         initializeViews();
         setupClickListeners();
