@@ -23,8 +23,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:scaleType="fitXY"
-            android:src="@drawable/logo"
-            app:shapeAppearanceOverlay="@style/cr50" />
+            android:src="@drawable/logo" />
 
         <LinearLayout
             android:id="@+id/rtjz43ttr41"
@@ -262,15 +261,14 @@
                 android:paddingHorizontal="37dp"
                 android:paddingVertical="12dp">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/rs20nrb6by7e"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/google"
-                    app:shapeAppearanceOverlay="@style/cr6" />
+                    app:srcCompat="@drawable/google" />
 
                 <TextView
                     android:id="@+id/rgld8xxhyo6e"

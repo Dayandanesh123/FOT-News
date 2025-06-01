@@ -222,7 +222,7 @@
                         android:layout_marginEnd="10dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/google"
-                        app:shapeAppearanceOverlay="@style/cr6" />
+                        app:shapeAppearanceOverlay="@null" />
 
                     <TextView
                         android:id="@+id/rgld8xxhyo6e"
