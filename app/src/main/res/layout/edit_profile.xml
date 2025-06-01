@@ -70,7 +70,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/btnConfirm"
+                android:id="@+id/btn_edit_Confirm"
                 android:layout_width="96dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_red"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:id="@+id/btnDeny"
+                android:id="@+id/btn_edit_deny"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_lighblue"

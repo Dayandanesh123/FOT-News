@@ -2,10 +2,10 @@
 //    alias(libs.plugins.android.application)
 //}
 plugins {
+//    alias(libs.plugins.android.application)
     id("com.android.application")
-
-    // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+
 }
 
 dependencies {
@@ -58,4 +58,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
 }
