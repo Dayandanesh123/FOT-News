@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +23,7 @@ public class Settings extends AppCompatActivity {
 
     // UI Components
     private LinearLayout signoutConfirmLayout;
+    private LinearLayout DeleteProfileLayout;
     private LinearLayout editProfileLayout;
     private LinearLayout userInfoLayout;
     private LinearLayout editInfoButton;
@@ -34,6 +36,9 @@ public class Settings extends AppCompatActivity {
     private LinearLayout btnEditCancel;
     private LinearLayout btnEditSave;
     private ImageView backImageView;
+    private TextView deleteProfile;
+    private LinearLayout btnDelete;
+    private LinearLayout btnkeep;
 
     // Firebase
     private FirebaseAuth auth;
@@ -66,11 +71,17 @@ public class Settings extends AppCompatActivity {
         signoutButton = findViewById(R.id.signout);
         emailTextView = findViewById(R.id.email2);
         usernameTextView = findViewById(R.id.username1);
-        editUsernameInput = findViewById(R.id.editUsername); // Ensure this exists in XML
+        editUsernameInput = findViewById(R.id.editUsername);
         btnSignoutCancel = findViewById(R.id.btnCancel);
         btnSignoutConfirm = findViewById(R.id.btnYes);
         btnEditCancel = findViewById(R.id.btn_edit_deny);
         btnEditSave = findViewById(R.id.btn_edit_Confirm);
+        DeleteProfileLayout = findViewById(R.id.activity_delete_profile_confirm);
+        deleteProfile = findViewById(R.id.delete);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnkeep = findViewById(R.id.btnKeep);
+
+
     }
 
     private void initializeFirebase() {
@@ -95,20 +106,37 @@ public class Settings extends AppCompatActivity {
         btnSignoutCancel.setOnClickListener(v -> hideSignoutConfirmation());
         btnEditSave.setOnClickListener(v -> saveProfileChanges());
         btnSignoutConfirm.setOnClickListener(v -> performSignOut());
+        deleteProfile.setOnClickListener(v -> showDeleteProfile());
+        btnDelete.setOnClickListener(v -> preformDeleteProfile());
+        btnkeep.setOnClickListener(v -> hideDeleteProfile());
+
     }
+    private void showDeleteProfile() {
+        DeleteProfileLayout.setVisibility(View.VISIBLE);
+        editProfileLayout.setVisibility(View.GONE);
+        signoutConfirmLayout.setVisibility(View.GONE);
+        updateUserInfoLayoutPosition(R.id.activity_delete_profile_confirm);
+    }
+
 
     private void showEditProfile() {
         editProfileLayout.setVisibility(View.VISIBLE);
         signoutConfirmLayout.setVisibility(View.GONE);
+        DeleteProfileLayout.setVisibility(View.GONE);
         updateUserInfoLayoutPosition(R.id.activity_edit_profile);
     }
 
     private void showSignoutConfirmation() {
         signoutConfirmLayout.setVisibility(View.VISIBLE);
         editProfileLayout.setVisibility(View.GONE);
+        DeleteProfileLayout.setVisibility(View.GONE);
         updateUserInfoLayoutPosition(R.id.activity_signout_confirm);
     }
 
+    private void hideDeleteProfile() {
+        DeleteProfileLayout.setVisibility(View.GONE);
+        resetUserInfoLayoutPosition();
+    }
     private void hideEditProfile() {
         editProfileLayout.setVisibility(View.GONE);
         resetUserInfoLayoutPosition();
@@ -118,6 +146,36 @@ public class Settings extends AppCompatActivity {
         signoutConfirmLayout.setVisibility(View.GONE);
         resetUserInfoLayoutPosition();
     }
+
+    private void preformDeleteProfile() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            user.delete()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Profile deleted successfully", Toast.LENGTH_SHORT).show();
+
+                            // Redirect to login screen or exit app
+                            Intent intent = new Intent(this, Login.class); // change if needed
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseAuthRecentLoginRequiredException) {
+                                Toast.makeText(this, "Please re-login to delete your profile", Toast.LENGTH_LONG).show();
+                                // Optional: You could redirect to re-login here
+                            } else {
+                                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void saveProfileChanges() {
         FirebaseUser user = auth.getCurrentUser();
@@ -149,7 +207,7 @@ public class Settings extends AppCompatActivity {
     }
 
     private void resetUserInfoLayoutPosition() {
-        updateUserInfoLayoutPosition(R.id.back); // Adjust based on your layout
+        updateUserInfoLayoutPosition(R.id.back);
     }
 
     private void performSignOut() {
